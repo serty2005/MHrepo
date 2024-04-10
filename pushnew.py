@@ -3,8 +3,10 @@ import sqlite3
 import os
 
 # Функция для создания таблицы в базе данных SQLite
+
+
 def create_table():
-    conn = sqlite3.connect('fiscal_registers.db')
+    conn = sqlite3.connect('fiscal_registers_fromPOS.db')
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS fiscal_registers
                  (modelName TEXT, serialNumber TEXT PRIMARY KEY, RNM TEXT, organizationName TEXT,
@@ -14,10 +16,12 @@ def create_table():
     conn.close()
 
 # Функция для вставки данных из файла .json в базу данных SQLite
+
+
 def insert_data_from_json(file_path):
     with open(file_path, 'r') as json_file:
         data = json.load(json_file)
-        conn = sqlite3.connect('fiscal_registers.db')
+        conn = sqlite3.connect('fiscal_registers_fromPOS.db')
         c = conn.cursor()
         c.execute('''INSERT OR REPLACE INTO fiscal_registers 
                      (modelName, serialNumber, RNM, organizationName, fn_serial, datetime_reg, 
@@ -30,6 +34,8 @@ def insert_data_from_json(file_path):
         conn.close()
 
 # Функция для обхода всех файлов .json в заданной директории и чтения данных из них
+
+
 def process_json_files(directory):
     for filename in os.listdir(directory):
         if filename.endswith('.json'):
@@ -37,6 +43,8 @@ def process_json_files(directory):
             insert_data_from_json(file_path)
 
 # Создаем таблицу в базе данных SQLite
+
+
 create_table()
 
 # Укажите путь к директории с .json файлами
