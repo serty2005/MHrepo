@@ -1,7 +1,6 @@
-import schedule
-import time
 import requests
 import sqlite3
+
 
 # Функция для создания таблицы в базе данных SQLite
 def create_table():
@@ -45,7 +44,3 @@ def update_database():
         print("База данных обновлена успешно.")
     else:
         print("Ошибка при получении данных:", response.status_code)
-
-
-# Запускаем обновление базы данных каждые 2 часа
-update_database()
