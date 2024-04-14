@@ -32,14 +32,14 @@ def compare_and_update():
                 if sd_date != json_date:  # Сравниваем даты
                     # Выводим UUID объекта для тестирования
                     print(f"Объект с UUID {sd_entry[3]} будет изменен.")
-                    # # Отправляем запрос на редактирование объекта в SD
-                    # edit_url = f'https://myhoreca.itsm365.com/sd/services/rest/edit/{sd_entry[3]}/'
-                    # params = {'accessKey': 'ваш_ключ_доступа', 'FNExpireDate': json_entry[2]}
-                    # response = requests.post(edit_url, params=params)
-                    # if response.status_code == 200:
-                    #     print(f"Объект с UUID {sd_entry[3]} успешно обновлен.")
-                    # else:
-                    #     print(f"Ошибка при обновлении объекта с UUID {sd_entry[3]}:", response.status_code)
+                    # Отправляем запрос на редактирование объекта в SD
+                    edit_url = f'https://myhoreca.itsm365.com/sd/services/rest/edit/{sd_entry[3]}/'
+                    params = {'accessKey': 'ваш_ключ_доступа', 'FNExpireDate': json_entry[2]}
+                    response = requests.post(edit_url, params=params)
+                    if response.status_code == 200:
+                        print(f"Объект с UUID {sd_entry[3]} успешно обновлен.")
+                    else:
+                        print(f"Ошибка при обновлении объекта с UUID {sd_entry[3]}:", response.status_code)
 
     conn_json.close()
     conn_sd.close()

@@ -1,11 +1,14 @@
 import json
 import sqlite3
 import os
+from dotenv import load_dotenv
 
 
 # Функция для создания таблицы в базе данных SQLite
 def create_table():
-    conn = sqlite3.connect('fiscal_registers_fromPOS.db')
+    load_dotenv()
+    path = os.getenv("BDPATH") + 'fiscal_registers_fromPOS.db'
+    conn = sqlite3.connect(path)
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS fiscal_registers
                  (modelName TEXT, serialNumber TEXT PRIMARY KEY, RNM TEXT, organizationName TEXT,
@@ -14,6 +17,8 @@ def create_table():
     conn.commit()
     conn.close()
 
+
+create_table()
 
 # Функция для вставки данных из файла .json в базу данных SQLite
 def insert_data_from_json(file_path):
