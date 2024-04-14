@@ -1,10 +1,15 @@
 import requests
 import sqlite3
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # Функция для создания таблицы в базе данных SQLite
 def create_table():
-    conn = sqlite3.connect('fiscal_registers_fromSD.db')
+    path = os.getenv("BDPATH") + 'fiscal_registers_fromSD.db'
+    conn = sqlite3.connect(path)
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS fiscal_registers
                  (RNKKT TEXT, FNNumber TEXT, KKTRegDate TEXT, UUID TEXT PRIMARY KEY,
@@ -14,10 +19,11 @@ def create_table():
 
 
 # Функция для вставки данных из JSON объекта в базу данных SQLite
-def insert_data_from_json(json_data):
-    conn = sqlite3.connect('fiscal_registers_fromSD.db')
+def insert_data_from_json(sd_data):
+    path = os.getenv("BDPATH") + 'fiscal_registers_fromSD.db'
+    conn = sqlite3.connect(path)
     c = conn.cursor()
-    for entry in json_data:
+    for entry in sd_data:
             RNKKT = entry['RNKKT']
             FNNumber = entry['FNNumber']
             KKTRegDate = entry['KKTRegDate']
@@ -35,12 +41,15 @@ def insert_data_from_json(json_data):
 # Функция для получения данных по указанной ручке и обновления базы данных
 def update_database():
     url = 'https://myhoreca.itsm365.com/sd/services/rest/find/objectBase$FR'
-    params = {'accessKey': 'be65d663-b9de-4f09-b476-b2b8fb2d6423', 'attrs': 'UUID,FRSerialNumber,RNKKT,KKTRegDate,FNExpireDate,FNNumber'}
+    params = {'accessKey': os.getenv('SDKEY'), 'attrs': 'UUID,FRSerialNumber,RNKKT,KKTRegDate,FNExpireDate,FNNumber'}
     response = requests.post(url, params=params)
     if response.status_code == 200:
-        json_data = response.json()
+        sd_data = response.json()
         create_table()
-        insert_data_from_json(json_data)
+        insert_data_from_json(sd_data)
         print("База данных обновлена успешно.")
     else:
         print("Ошибка при получении данных:", response.status_code)
+
+
+update_database()
