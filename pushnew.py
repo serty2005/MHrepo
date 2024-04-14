@@ -3,10 +3,12 @@ import sqlite3
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
+
 
 # Функция для создания таблицы в базе данных SQLite
 def create_table():
-    load_dotenv()
+
     path = os.getenv("BDPATH") + 'fiscal_registers_fromPOS.db'
     conn = sqlite3.connect(path)
     c = conn.cursor()
@@ -18,13 +20,12 @@ def create_table():
     conn.close()
 
 
-create_table()
-
 # Функция для вставки данных из файла .json в базу данных SQLite
 def insert_data_from_json(file_path):
     with open(file_path, 'r') as json_file:
         data = json.load(json_file)
-        conn = sqlite3.connect('fiscal_registers_fromPOS.db')
+        path = os.getenv("BDPATH") + 'fiscal_registers_fromPOS.db'
+        conn = sqlite3.connect(path)
         c = conn.cursor()
         c.execute('''INSERT OR REPLACE INTO fiscal_registers 
                      (modelName, serialNumber, RNM, organizationName, fn_serial, datetime_reg, 
@@ -43,3 +44,7 @@ def process_json_files(directory):
         if filename.endswith('.json'):
             file_path = os.path.join(directory, filename)
             insert_data_from_json(file_path)
+
+
+create_table()
+process_json_files(os.getenv('JSONPATH'))
