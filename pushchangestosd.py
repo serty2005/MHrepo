@@ -1,12 +1,19 @@
 import sqlite3
 import requests
+import os
 from dateutil import parser
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # Функция для сравнения данных и отправки запроса на редактирование объекта в SD
 def compare_and_update():
-    conn_json = sqlite3.connect('fiscal_registers_fromPOS.db')
-    conn_sd = sqlite3.connect('fiscal_registers_fromSD.db')
+
+    pathbd = os.getenv("BDPATH") + 'fiscal_registers_fromSD.db'
+    conn_sd = sqlite3.connect(pathbd)
+    path = os.getenv("BDPATH") + 'fiscal_registers_fromPOS.db'
+    conn_json = sqlite3.connect(path)
     c_json = conn_json.cursor()
     c_sd = conn_sd.cursor()
 
@@ -33,13 +40,13 @@ def compare_and_update():
                     # Выводим UUID объекта для тестирования
                     print(f"Объект с UUID {sd_entry[3]} будет изменен.")
                     # Отправляем запрос на редактирование объекта в SD
-                    edit_url = f'https://myhoreca.itsm365.com/sd/services/rest/edit/{sd_entry[3]}/'
-                    params = {'accessKey': 'ваш_ключ_доступа', 'FNExpireDate': json_entry[2]}
-                    response = requests.post(edit_url, params=params)
-                    if response.status_code == 200:
-                        print(f"Объект с UUID {sd_entry[3]} успешно обновлен.")
-                    else:
-                        print(f"Ошибка при обновлении объекта с UUID {sd_entry[3]}:", response.status_code)
+                    # edit_url = f'https://myhoreca.itsm365.com/sd/services/rest/edit/{sd_entry[3]}/'
+                    # params = {'accessKey': os.getenv('SDKEY'), 'FNExpireDate': json_entry[2]}
+                    # response = requests.post(edit_url, params=params)
+                    # if response.status_code == 200:
+                    #     print(f"Объект с UUID {sd_entry[3]} успешно обновлен.")
+                    # else:
+                    #     print(f"Ошибка при обновлении объекта с UUID {sd_entry[3]}:", response.status_code)
 
     conn_json.close()
     conn_sd.close()
