@@ -1,13 +1,17 @@
 import schedule
 import time
+import os
+from dotenv import load_dotenv
 from getfromsd import update_database_from_SD
 from pushchangestosd import compare_and_update
 from pushnew import process_json_folder
 
 
+
 def run_tasks():
     # Задание для работы с папкой с JSON файлами каждый час
-    schedule.every().hour.do(process_json_folder, directory='путь_к_папке_с_json')
+    load_dotenv()
+    schedule.every().hour.do(process_json_folder, os.getenv('JSONPATH'))
 
     # Задание для выгрузки данных из SD каждые 2 часа
     schedule.every(2).hours.do(update_database_from_SD)
