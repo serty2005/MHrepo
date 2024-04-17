@@ -1,8 +1,7 @@
 import sqlite3
 import pyodbc
+import os
 
-# Строка подключения к базе данных MSSQL
-CLBASESTRING = "DRIVER={ODBC Driver 17 for SQL Server};SERVER=10.25.1.220,1433;DATABASE=CLEARbatServer;UID=sa;PWD=Resto#Test01"
 
 def main():
     # Подключение к базе данных SQLite
@@ -10,7 +9,7 @@ def main():
     sqlite_cursor = sqlite_conn.cursor()
 
     # Подключение к базе данных MSSQL
-    mssql_conn = pyodbc.connect(CLBASESTRING)
+    mssql_conn = pyodbc.connect(os.getenv('MSSQLSTRING'))
     mssql_cursor = mssql_conn.cursor()
 
     try:
@@ -22,7 +21,7 @@ def main():
             id, teamviewer, anydesk, device_name, folder = row
             
             # Проверка на наличие только цифр в полях Teamviewer и Anydesk
-            if (teamviewer and not teamviewer.isdigit()) or anydesk:
+            if (teamviewer and not teamviewer.isdigit()) or (anydesk and not anydesk.isdigit()):
                 print("Skipping record with non-numeric Teamviewer or Anydesk:", id, device_name)
                 continue
             
