@@ -20,20 +20,36 @@ def main():
         for row in workstations_data:
             id, teamviewer, anydesk, device_name, folder = row
             
-            # Проверка на наличие только цифр в полях Teamviewer и Anydesk
-            if (teamviewer and not teamviewer.isdigit()) or (anydesk and not anydesk.isdigit()):
-                print("Skipping record with non-numeric Teamviewer or Anydesk:", id, device_name)
+            # Проверка длины строк Anydesk и Teamviewer
+            if anydesk and len(anydesk) > 50:
+                print("Skipping record with too long Anydesk:", id, device_name)
                 continue
-            
-            # Проверка на наличие хотя бы одного из полей Teamviewer и Anydesk
-            if not (teamviewer or anydesk):
-                print("Skipping record with no Teamviewer or Anydesk:", id, device_name)
+            if teamviewer and len(teamviewer) > 50:
+                print("Skipping record with too long Teamviewer:", id, device_name)
                 continue
             
             # Вставка данных в таблицу MSSQL
-            mssql_cursor.execute("INSERT INTO dbo.Entities (id, name, type, folder, login, revision) VALUES (?, ?, ?, ?, ?, ?)",
-                                 (id, device_name, "Teamviewer" if teamviewer else "Anydesk", folder, teamviewer or anydesk, 1))  # Добавляем 1 для revision
-            mssql_conn.commit()
+            if anydesk and teamviewer:
+                # Создание двух записей для Anydesk и Teamviewer
+                mssql_cursor.execute("INSERT INTO dbo.Entities (id, revision, name, type, folder, ip, port, login, password, deleted, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                                     (id, 1, device_name, "Anydesk", folder, '', '', anydesk, '', False, ''))  # Добавляем 1 для revision
+                mssql_conn.commit()
+                
+                mssql_cursor.execute("INSERT INTO dbo.Entities (id, revision, name, type, folder, ip, port, login, password, deleted, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                                     (id, 1, device_name, "Teamviewer", folder, '', '', teamviewer, '', False, ''))  # Добавляем 1 для revision
+                mssql_conn.commit()
+            elif anydesk:
+                # Создание записи для Anydesk
+                mssql_cursor.execute("INSERT INTO dbo.Entities (id, revision, name, type, folder, ip, port, login, password, deleted, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                                     (id, 1, device_name, "Anydesk", folder, '', '', anydesk, '', False, ''))  # Добавляем 1 для revision
+                mssql_conn.commit()
+            elif teamviewer:
+                # Создание записи для Teamviewer
+                mssql_cursor.execute("INSERT INTO dbo.Entities (id, revision, name, type, folder, ip, port, login, password, deleted, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                                     (id, 1, device_name, "Teamviewer", folder, '', '', teamviewer, '', False, ''))  # Добавляем 1 для revision
+                mssql_conn.commit()
+            else:
+                print("Neither Anydesk nor Teamviewer present for record with id:", id)
 
     except Exception as e:
         print("Error:", e)
