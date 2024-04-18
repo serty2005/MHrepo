@@ -2,3 +2,4 @@
 /.venv
 /.idea
 /files/*.db
+/__pycache__

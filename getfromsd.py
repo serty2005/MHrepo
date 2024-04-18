@@ -1,10 +1,6 @@
-import requests
 import sqlite3
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
+import load_data as load
 
 # Функция для создания таблицы в базе данных SQLite
 def create_table():
@@ -42,14 +38,14 @@ def insert_data_from_json(sd_data):
 def update_database():
     url = 'https://myhoreca.itsm365.com/sd/services/rest/find/objectBase$FR'
     params = {'accessKey': os.getenv('SDKEY'), 'attrs': 'UUID,FRSerialNumber,RNKKT,KKTRegDate,FNExpireDate,FNNumber'}
-    response = requests.post(url, params=params)
-    if response.status_code == 200:
-        sd_data = response.json()
+    response = load.post(url, params)
+    if response:
         create_table()
-        insert_data_from_json(sd_data)
+        insert_data_from_json(response)
         print("База данных обновлена успешно.")
     else:
         print("Ошибка при получении данных:", response.status_code)
 
 
-update_database()
+if __name__ == '__main__':
+    update_database()

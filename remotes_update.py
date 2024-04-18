@@ -1,8 +1,6 @@
-import requests
 import sqlite3
 import uuid
 import os
-import json
 import load_data as load
 
 # Генерация уникального GUID
@@ -50,8 +48,9 @@ with sqlite3.connect(pathbd) as conn:
                     metaClass TEXT)''')
 
     # Загрузка данных
-    url = f"https://myhoreca.itsm365.com/sd/services/rest/find/objectBase$Workstation?accessKey={os.getenv('SDKEY')}&attrs=UUID,GK,Teamviewer,AnyDesk,DeviceName,lastModifiedDate,owner"
-    data = load(url)
+    url = "https://myhoreca.itsm365.com/sd/services/rest/find/objectBase$Workstation"
+    params = {'accessKey': os.getenv('SDKEY'), 'attrs': 'UUID,GK,Teamviewer,AnyDesk,DeviceName,lastModifiedDate,owner'}
+    data = load.post(url, params)
 
     if data:
         owners_guids = {}  # Словарь для хранения GUID'ов владельцев
@@ -85,8 +84,9 @@ with sqlite3.connect(pathbd) as conn:
             # Добавление записи в таблицу владельцев
             cursor.execute('''INSERT OR IGNORE INTO owners (id, UUID, title, metaClass) VALUES (?, ?, ?, ?)''', (owners_guids.get(workstation_owner_uuid), workstation_owner_uuid, owner_title, owner_meta_class))
 
-    url_servers = f"https://myhoreca.itsm365.com/sd/services/rest/find/objectBase$Server?accessKey={os.getenv('SDKEY')}&attrs=UUID,UniqueID,DeviceName,Teamviewer,RDP,IP,CabinetLink,owner,AnyDesk"
-    data_servers = load(url_servers)
+    url_servers = "https://myhoreca.itsm365.com/sd/services/rest/find/objectBase$Server"
+    params_servers = {'accessKey': os.getenv('SDKEY'), 'attrs': 'UUID,UniqueID,DeviceName,Teamviewer,RDP,IP,CabinetLink,owner,AnyDesk'}
+    data_servers = load.post(url_servers, params_servers)
 
     if data_servers:
         owners_guids = {}  # Словарь для хранения GUID'ов владельцев

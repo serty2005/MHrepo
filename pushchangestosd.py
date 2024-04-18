@@ -1,8 +1,7 @@
 import sqlite3
-import requests
 import os
 from dateutil import parser
-from dotenv import load_dotenv
+import load_data as load
 
 
 # Функция для сравнения данных и отправки запроса на редактирование объекта в SD
@@ -42,12 +41,8 @@ def compare_and_update():
                     # Отправляем запрос на редактирование объекта в SD
                     edit_url = f'https://myhoreca.itsm365.com/sd/services/rest/edit/{sd_entry[3]}/'
                     params = {'accessKey': os.getenv('SDKEY'), 'FNNumber': json_entry[1], 'FNExpireDate': formatted_date}
-                    response = requests.post(edit_url, params=params)
-                    if response.status_code == 200 or 201:
-                        print(f"Объект с UUID {sd_entry[3]} успешно обновлен.")
-                    else:
-                        print(f"Ошибка при обновлении объекта с UUID {sd_entry[3]}:", response.status_code)
-
+                    load(edit_url, params)
+                    
     conn_json.close()
     conn_sd.close()
 
