@@ -32,21 +32,21 @@ def main():
             if anydesk and teamviewer:
                 # Создание двух записей для Anydesk и Teamviewer
                 mssql_cursor.execute("INSERT INTO dbo.Entities (id, revision, name, type, folder, ip, port, login, password, deleted, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                                     (id, 1, device_name, "Anydesk", folder, '', '', anydesk, '', False, ''))  # Добавляем 1 для revision
+                                     (id, 1, device_name, "Anydesk", folder, '', '', anydesk, '', 'False', ''))  # Добавляем 1 для revision
                 mssql_conn.commit()
                 
                 mssql_cursor.execute("INSERT INTO dbo.Entities (id, revision, name, type, folder, ip, port, login, password, deleted, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                                     (id, 1, device_name, "Teamviewer", folder, '', '', teamviewer, '', False, ''))  # Добавляем 1 для revision
+                                     (id, 1, device_name, "Teamviewer", folder, '', '', teamviewer, '', 'False', ''))  # Добавляем 1 для revision
                 mssql_conn.commit()
             elif anydesk:
                 # Создание записи для Anydesk
                 mssql_cursor.execute("INSERT INTO dbo.Entities (id, revision, name, type, folder, ip, port, login, password, deleted, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                                     (id, 1, device_name, "Anydesk", folder, '', '', anydesk, '', False, ''))  # Добавляем 1 для revision
+                                     (id, 1, device_name, "Anydesk", folder, '', '', anydesk, '', 'False', ''))  # Добавляем 1 для revision
                 mssql_conn.commit()
             elif teamviewer:
                 # Создание записи для Teamviewer
                 mssql_cursor.execute("INSERT INTO dbo.Entities (id, revision, name, type, folder, ip, port, login, password, deleted, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                                     (id, 1, device_name, "Teamviewer", folder, '', '', teamviewer, '', False, ''))  # Добавляем 1 для revision
+                                     (id, 1, device_name, "Teamviewer", folder, '', '', teamviewer, '', 'False', ''))  # Добавляем 1 для revision
                 mssql_conn.commit()
             else:
                 print("Neither Anydesk nor Teamviewer present for record with id:", id)
