@@ -2,10 +2,7 @@ import sqlite3
 import requests
 import os
 from dateutil import parser
-from datetime import datetime
 from dotenv import load_dotenv
-
-load_dotenv()
 
 
 # Функция для сравнения данных и отправки запроса на редактирование объекта в SD
@@ -54,6 +51,6 @@ def compare_and_update():
     conn_json.close()
     conn_sd.close()
 
-
 # Вызываем функцию для сравнения данных и обновления объектов при несоответствии
-compare_and_update()
+if __name__ == '__main__':
+    compare_and_update()

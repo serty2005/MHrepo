@@ -1,17 +1,9 @@
-import requests
 import sqlite3
 import uuid
 import os
-import json
+import load_data as load
 
 # Загрузка данных из ServiceDesk
-def load_data(url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        return json.loads(response.text)
-    else:
-        print("Ошибка при загрузке данных:", response.status_code)
-        return None
 
 # Генерация уникального GUID
 def generate_guid():
@@ -44,8 +36,8 @@ with sqlite3.connect(pathbd) as conn:
                     UUID TEXT)''')
 
     # Загрузка данных о серверах
-    url_servers = "https://myhoreca.itsm365.com/sd/services/rest/find/objectBase$Server?accessKey=bcc5b5cf-7a11-44ad-bde8-7968a423f22a&attrs=UUID,UniqueID,DeviceName,Teamviewer,RDP,IP,CabinetLink,owner,AnyDesk"
-    data_servers = load_data(url_servers)
+    url_servers = f"https://myhoreca.itsm365.com/sd/services/rest/find/objectBase$Server?accessKey={os.getenv('SDKEY')}&attrs=UUID,UniqueID,DeviceName,Teamviewer,RDP,IP,CabinetLink,owner,AnyDesk"
+    data_servers = load(url_servers)
 
     if data_servers:
         owners_guids = {}  # Словарь для хранения GUID'ов владельцев

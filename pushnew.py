@@ -1,10 +1,6 @@
 import json
 import sqlite3
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
 
 # Функция для создания таблицы в базе данных SQLite
 def create_table():
@@ -46,5 +42,6 @@ def process_json_files(directory):
             insert_data_from_json(file_path)
 
 
-create_table()
-process_json_files(os.getenv('JSONPATH'))
+if __name__ == '__main__':
+    create_table()
+    process_json_files(os.getenv('JSONPATH'))
