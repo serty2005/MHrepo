@@ -8,8 +8,8 @@ RUN apk --no-cache add \
     bash \
     tzdata \
     git \
-    && pip3 install --upgrade pip \
-    && pip3 install requests pyodbc schedule
+    pip3 install --upgrade pip \
+    pip3 install requests pyodbc schedule
 
 # Клонируем репозиторий из GitHub
 RUN git clone https://github.com/serty2005/MHrepo.git /opt/app
