@@ -23,4 +23,4 @@ RUN echo "21 4 * * * root /usr/bin/python3 /opt/app/getfromjson.py" > /etc/perio
 RUN echo "22 4 * * * root /usr/bin/python3 /opt/app/pushchangestosd.py" > /etc/periodic/daily/mycronjob
 
 # Запускаем crond при запуске контейнера
-CMD ["/bin/sh"]
+CMD ["tail", "-f", "/dev/null"]
