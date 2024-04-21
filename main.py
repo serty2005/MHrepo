@@ -3,7 +3,7 @@ import time
 import os
 from getfromsd import update_database_from_SD
 from pushchangestosd import compare_and_update
-from pushnew import process_json_folder
+from getfronjson import process_json_folder
 
 
 
