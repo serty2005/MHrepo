@@ -6,9 +6,4 @@ services:
     image: fnupdater
     volumes:
       - /opt/ftp:/opt/app/files
-    environment:
-      - BDPATH=./files
-      - JSONPATH=./files/ftp
-      - MSSQLSTRING=no_string
-      - SDKEY=no_key
     restart: always
