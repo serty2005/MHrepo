@@ -3,3 +3,4 @@
 /.idea
 /files/*.db
 /__pycache__
+*.yml

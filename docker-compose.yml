@@ -3,7 +3,9 @@ version: '3'
 services:
   fnupdater:
     build: .
-    image: fnupdater
+    image: fnupdater-test
     volumes:
       - /opt/ftp:/opt/app/files
     restart: always
+    env_file:
+      - fileName
