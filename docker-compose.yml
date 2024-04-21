@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  FNupdater:
+  fnupdater:
     build: .
-    image: FNupdater
+    image: fnupdater
     volumes:
       - /opt/ftp:/opt/app/files
     environment:
