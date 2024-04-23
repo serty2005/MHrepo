@@ -13,12 +13,15 @@ services:
   ftp:
     image: fauria/vsftpd
     ports:
-      - 20:20
-      - 21:21
-      - 21100-21110:21100-21110
+      - 20-21:20-21
+      - 21100-21105:21100-21105
     environment:
       - FTP_USER=ftpuser
-      - FTP_PASSWORD=11
+      - FTP_PASS=11
+      - PASV_MIN_PORT=21100
+      - PASV_MAX_PORT=21105
+      - PASV_ADDRESS=10.25.1.220
+      - PASV_ADDR_RESOLVE=YES
     volumes:
       - /opt/ftp:/home/vsftpd/
       - /opt/ftp/logs:/var/log/vsftpd

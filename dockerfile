@@ -20,9 +20,9 @@ ENV TZ=Europe/Moscow
 RUN git clone https://github.com/serty2005/MHrepo.git /opt/app
 
 # Создаем файл крона
-RUN echo "20 4 * * * root /usr/bin/python3 /opt/app/getfomsd.py" > /etc/periodic/daily/mycronjob
-RUN echo "21 4 * * * root /usr/bin/python3 /opt/app/getfromjson.py" >> /etc/periodic/daily/mycronjob
-RUN echo "22 4 * * * root /usr/bin/python3 /opt/app/pushchangestosd.py" >> /etc/periodic/daily/mycronjob
+RUN echo "20 4 * * * root /usr/bin/python3 /opt/app/getfomsd.py > /dev/stdout" > /etc/periodic/daily/mycronjob
+RUN echo "21 4 * * * root /usr/bin/python3 /opt/app/getfromjson.py > /dev/stdout" >> /etc/periodic/daily/mycronjob
+RUN echo "22 4 * * * root /usr/bin/python3 /opt/app/pushchangestosd.py > /dev/stdout" >> /etc/periodic/daily/mycronjob
 
 # Запускаем crond при запуске контейнера
 CMD ["crond", "-f"]
