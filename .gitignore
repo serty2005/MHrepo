@@ -4,3 +4,4 @@
 /files/*.db
 /__pycache__
 docker-compose.yml
+/.temp
