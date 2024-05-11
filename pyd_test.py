@@ -23,7 +23,7 @@ class Company(BaseModel):
 with open('oucompany.json') as f:
     # datax = json.loads(f)
     m = Company.model_validate_json(json_data=f)
-# 
+
 # m = Company.model_validate_json(datax)
 # dataobject = Company(**datax)
 print(type(m))
